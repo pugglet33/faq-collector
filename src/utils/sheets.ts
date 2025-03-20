@@ -5,12 +5,15 @@ import { JWT } from 'google-auth-library';
 const getAuthClient = () => {
   let credentials;
   
-  // Check if we're running on Vercel
-  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    throw new Error('GOOGLE_APPLICATION_CREDENTIALS environment variable is required');
+  }
+
+  try {
     credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-  } else {
-    // Local development - load from file
-    credentials = require('../../service-account.json');
+  } catch (error) {
+    console.error('Error parsing credentials:', error);
+    throw new Error('Invalid GOOGLE_APPLICATION_CREDENTIALS format');
   }
 
   return new JWT({
