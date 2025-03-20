@@ -2,10 +2,10 @@
 
 A web application to collect questions and concerns about Box Office, RAPR, 7star, and AIDS systems.
 
-## Current Version: v1.0.1
+## Current Version: v1.0.2
+- Real-time Google Sheets integration
 - Persistent session IDs for tracking submissions
 - CSV export functionality
-- Real-time Google Sheets integration
 - Stable database schema
 
 ## Features
@@ -63,18 +63,23 @@ Required environment variables:
 - `GOOGLE_SHEETS_ID`: Target Google Sheet ID
 
 ## Version History
-- v1.0.1
-  - Added session persistence for spam tracking
-  - Added CSV exports
+- v1.0.2 (Current)
   - Added real-time Google Sheets integration
+  - Improved documentation
+- v1.0.1
+  - Added CSV export functionality
+  - Added session persistence for spam tracking
 - v1.0.0 
-  - Initial stable release with basic submission functionality
+  - Initial stable release
+  - Basic submission functionality
+  - Database integration
 
 ## Reverting to Stable Versions
 To revert to a stable version:
 ```bash
-git checkout v1.0.1  # For latest stable with Sheets integration
-git checkout v1.0.0  # For initial stable release
+git checkout v1.0.2  # Latest with Google Sheets integration
+git checkout v1.0.1  # Version with CSV exports
+git checkout v1.0.0  # Initial stable release
 ```
 
 ## Tech Stack
