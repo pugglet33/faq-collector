@@ -78,7 +78,17 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <Toaster position="bottom-center" />
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#333',
+            color: '#62F895',
+            border: '2px solid #62F895'
+          },
+        }}
+      />
     </div>
   );
 }
