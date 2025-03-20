@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import { RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 
 const prisma = new PrismaClient();
 
@@ -9,8 +9,9 @@ export async function POST(request: Request) {
   try {
     const { content, category } = await request.json();
     
-    // Get or create session ID
-    const sessionId = uuidv4();
+    // Get existing session ID from cookies or create new one
+    const cookieStore = new RequestCookies(request.headers);
+    const sessionId = cookieStore.get('sessionId')?.value ?? uuidv4();
 
     // Create submission in database
     const submission = await prisma.submission.create({
@@ -24,17 +25,17 @@ export async function POST(request: Request) {
     // Create response with cookie
     const response = NextResponse.json({ success: true, submission });
     
-    // Set session cookie
-    const cookieOptions: ResponseCookie = {
-      name: 'sessionId',
-      value: sessionId,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 30 // 30 days
-    };
-    
-    response.cookies.set(cookieOptions);
+    // Set cookie only if it doesn't exist
+    if (!cookieStore.get('sessionId')) {
+      response.cookies.set({
+        name: 'sessionId',
+        value: sessionId,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 30 // 30 days
+      });
+    }
 
     return response;
   } catch (error) {
