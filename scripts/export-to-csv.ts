@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import * as fs from 'fs';
-import * as path from 'path';
+require('dotenv').config();
+const { PrismaClient } = require('@prisma/client');
+const fs = require('fs');
+const path = require('path');
 
 const prisma = new PrismaClient();
 
@@ -14,6 +15,10 @@ type Submission = {
 
 async function exportToCSV() {
   try {
+    if (!process.env.DATABASE_URL) {
+      throw new Error('DATABASE_URL environment variable is not set');
+    }
+
     // Get all submissions ordered by creation date
     const submissions: Submission[] = await prisma.submission.findMany({
       orderBy: {
@@ -53,6 +58,7 @@ async function exportToCSV() {
     fs.writeFileSync(filepath, csvContent);
 
     console.log(`Successfully exported to ${filepath}`);
+    console.log(`Found ${submissions.length} submissions`);
   } catch (error) {
     console.error('Export failed:', error);
   } finally {
