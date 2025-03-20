@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
