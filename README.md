@@ -1,50 +1,45 @@
 # FAQ Collector
 
-A web application for collecting questions and concerns about Box Office, RAPR, 7star, and AIDS systems.
+A web application to collect questions and concerns about Box Office, RAPR, 7star, and AIDS systems.
+
+## Current Version: v1.0.1
+- Persistent session IDs for tracking submissions
+- CSV export functionality
+- Stable database schema
 
 ## Features
-
-- Simple, user-friendly interface
-- Category-based question submission
-- Session tracking for user submissions
+- Submit questions/concerns with category selection
 - Toast notifications for feedback
+- Session tracking for spam prevention
+- CSV export of all submissions
 - PostgreSQL database with Prisma ORM
 
-## Tech Stack
+## Stable Versions
+- v1.0.1 - Added session persistence and CSV exports
+- v1.0.0 - Initial stable release with basic submission functionality
 
-- Next.js 14 (React framework)
-- React 18
-- TypeScript
-- TailwindCSS for styling
-- PostgreSQL database
-- Prisma 6.2.1 as ORM
-
-## Setup Instructions
-
-1. Install dependencies:
+## Development
 ```bash
+# Install dependencies
 npm install
-```
 
-2. Set up your environment variables by creating a `.env` file with:
-```
-DATABASE_URL="postgresql://user:password@host:port/database"
-```
-
-3. Initialize the database:
-```bash
-npx prisma db push
-```
-
-4. Run the development server:
-```bash
+# Run development server
 npm run dev
+
+# Export submissions to CSV
+npm run export-csv
 ```
 
-## Deploying to Vercel
+## Database
+Using Neon PostgreSQL with Prisma ORM. The database schema is stable and includes:
+- Submissions table with content, category, sessionId, and timestamps
 
-1. Push your code to a GitHub repository
-2. Visit [Vercel](https://vercel.com/new) and import your repository
-3. Add the required environment variables:
-   - `DATABASE_URL`: Your PostgreSQL connection string
-4. Deploy!
+## Deployment
+The application is deployed on Vercel at https://faq-collector.vercel.app/
+
+## Reverting to Stable Versions
+To revert to a stable version:
+```bash
+git checkout v1.0.1  # For latest stable with session tracking and CSV export
+git checkout v1.0.0  # For initial stable release
+```
