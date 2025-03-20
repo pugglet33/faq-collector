@@ -6,6 +6,7 @@ import { toast, Toaster } from 'react-hot-toast';
 export default function Home() {
   const [category, setCategory] = useState<string>('general');
   const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     if (!content.trim()) {
@@ -13,7 +14,11 @@ export default function Home() {
       return;
     }
 
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -26,6 +31,8 @@ export default function Home() {
       setContent('');
     } catch {
       toast.error('Failed to submit question');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,6 +64,7 @@ export default function Home() {
                   checked={category === cat}
                   onChange={(e) => setCategory(e.target.value)}
                   className="accent-[#62F895]"
+                  disabled={isSubmitting}
                 />
                 <span>{cat}</span>
               </label>
@@ -68,13 +76,28 @@ export default function Home() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="Enter your question or concern..."
             className="w-full h-32 p-3 bg-black border-2 border-[#62F895] rounded-lg text-[#62F895] placeholder-[#62F895]/50 focus:outline-none focus:ring-2 focus:ring-[#62F895]"
+            disabled={isSubmitting}
           />
 
           <button
             onClick={handleSubmit}
-            className="w-full py-3 bg-[#62F895] text-black font-semibold rounded-lg hover:bg-[#52E885] transition-colors"
+            disabled={isSubmitting}
+            className={`w-full py-3 bg-[#62F895] text-black font-semibold rounded-lg hover:bg-[#52E885] transition-colors
+              ${isSubmitting 
+                ? 'bg-gray-500 cursor-not-allowed'
+                : ''
+              }`}
           >
-            Submit Question
+            {isSubmitting ? (
+              <>
+                <span className="opacity-0">Submit Question</span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                </div>
+              </>
+            ) : (
+              'Submit Question'
+            )}
           </button>
         </div>
       </div>
