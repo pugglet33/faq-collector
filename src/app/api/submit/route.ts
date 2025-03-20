@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
+import { appendToSheet } from '@/utils/sheets';
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,15 @@ export async function POST(request: Request) {
         sessionId,
       },
     });
+
+    // Append to Google Sheet
+    await appendToSheet([
+      submission.id,
+      submission.content,
+      submission.category,
+      submission.sessionId,
+      submission.createdAt.toISOString()
+    ]);
 
     // Create response with cookie
     const response = NextResponse.json({ success: true, submission });
