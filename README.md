@@ -3,48 +3,60 @@
 A web application for collecting questions and concerns about Box Office, RAPR, 7star, and AIDS systems.
 
 ## Features
-
-- Simple, user-friendly interface
-- Category-based question submission
+- Simple form for submitting questions and concerns
+- Category selection (General, Box Office, RAPR, 7star, AIDS)
 - Session tracking for user submissions
-- Toast notifications for feedback
-- PostgreSQL database with Prisma ORM
+- Modern UI with toast notifications
+- PostgreSQL database integration
 
 ## Tech Stack
-
-- Next.js 14 (React framework)
+- Next.js 14
 - React 18
 - TypeScript
-- TailwindCSS for styling
-- PostgreSQL database
-- Prisma 6.2.1 as ORM
+- TailwindCSS
+- Prisma with Neon PostgreSQL
+- Vercel for deployment
 
-## Setup Instructions
+## Deployment
+The application is deployed at: https://faq-collector.vercel.app/
 
-1. Install dependencies:
+## Version History
+- v1.0.0: First stable version with working form submission and database integration
+  - Tagged as `v1.0.0`
+  - Available in the `v1` branch
+
+### Reverting to v1
+If you need to revert to the stable v1 version:
 ```bash
-npm install
+git checkout v1
 ```
 
-2. Set up your environment variables by creating a `.env` file with:
-```
-DATABASE_URL="postgresql://user:password@host:port/database"
-```
-
-3. Initialize the database:
+Or to revert to the exact v1.0.0 release:
 ```bash
-npx prisma db push
+git checkout v1.0.0
 ```
 
-4. Run the development server:
-```bash
-npm run dev
-```
+## Development
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   - Create a `.env` file
+   - Add your Neon PostgreSQL URL:
+     ```
+     DATABASE_URL=your_neon_postgres_url
+     ```
+4. Run database migrations:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Deploying to Vercel
-
-1. Push your code to a GitHub repository
-2. Visit [Vercel](https://vercel.com/new) and import your repository
-3. Add the required environment variables:
-   - `DATABASE_URL`: Your PostgreSQL connection string
-4. Deploy!
+## Environment Variables
+- `DATABASE_URL`: Neon PostgreSQL connection string
