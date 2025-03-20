@@ -24,7 +24,7 @@ export default function Home() {
       
       toast.success('Question submitted successfully');
       setContent('');
-    } catch (error) {
+    } catch {
       toast.error('Failed to submit question');
     }
   };
