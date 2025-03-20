@@ -5,6 +5,7 @@ A web application to collect questions and concerns about Box Office, RAPR, 7sta
 ## Current Version: v1.0.1
 - Persistent session IDs for tracking submissions
 - CSV export functionality
+- Real-time Google Sheets integration
 - Stable database schema
 
 ## Features
@@ -12,11 +13,36 @@ A web application to collect questions and concerns about Box Office, RAPR, 7sta
 - Toast notifications for feedback
 - Session tracking for spam prevention
 - CSV export of all submissions
+- Real-time Google Sheets synchronization
 - PostgreSQL database with Prisma ORM
 
-## Stable Versions
-- v1.0.1 - Added session persistence and CSV exports
-- v1.0.0 - Initial stable release with basic submission functionality
+## Data Management
+### Database
+Using Neon PostgreSQL with Prisma ORM. The database schema includes:
+- Submissions table with content, category, sessionId, and timestamps
+
+### CSV Export
+Export all submissions to CSV format:
+```bash
+npm run export-csv
+```
+This creates a dated file (e.g., `faq-submissions-2025-03-20.csv`) in the `exports` directory.
+
+### Google Sheets Integration
+All submissions are automatically synced to a Google Sheet in real-time. The integration:
+- Updates the sheet immediately when new submissions are received
+- Includes submission ID, content, category, session ID, and timestamp
+- Uses service account authentication for secure access
+- Gracefully handles connection issues without disrupting submissions
+
+#### Setting up Google Sheets (for deployment)
+1. Create a Google Cloud project
+2. Enable Google Sheets API
+3. Create a service account and download credentials
+4. Share your target Google Sheet with the service account email
+5. Add these environment variables to your deployment:
+   - `GOOGLE_APPLICATION_CREDENTIALS`: Service account JSON credentials
+   - `GOOGLE_SHEETS_ID`: Your Google Sheet ID
 
 ## Development
 ```bash
@@ -25,21 +51,36 @@ npm install
 
 # Run development server
 npm run dev
-
-# Export submissions to CSV
-npm run export-csv
 ```
-
-## Database
-Using Neon PostgreSQL with Prisma ORM. The database schema is stable and includes:
-- Submissions table with content, category, sessionId, and timestamps
 
 ## Deployment
 The application is deployed on Vercel at https://faq-collector.vercel.app/
 
+### Environment Variables
+Required environment variables:
+- `DATABASE_URL`: PostgreSQL connection string
+- `GOOGLE_APPLICATION_CREDENTIALS`: Google service account JSON
+- `GOOGLE_SHEETS_ID`: Target Google Sheet ID
+
+## Version History
+- v1.0.1
+  - Added session persistence for spam tracking
+  - Added CSV exports
+  - Added real-time Google Sheets integration
+- v1.0.0 
+  - Initial stable release with basic submission functionality
+
 ## Reverting to Stable Versions
 To revert to a stable version:
 ```bash
-git checkout v1.0.1  # For latest stable with session tracking and CSV export
+git checkout v1.0.1  # For latest stable with Sheets integration
 git checkout v1.0.0  # For initial stable release
 ```
+
+## Tech Stack
+- Next.js 14
+- React 18
+- TypeScript
+- TailwindCSS
+- PostgreSQL with Prisma
+- Google Sheets API
