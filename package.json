@@ -7,7 +7,8 @@
     "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
-    "export-csv": "ts-node scripts/export-to-csv.ts"
+    "export-csv": "ts-node scripts/export-to-csv.ts",
+    "reset-data": "ts-node scripts/reset-db.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
